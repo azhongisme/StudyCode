@@ -21,14 +21,15 @@ struct Input {
   void await_resume() {}
 };
 
+promise func() {
+  Input t;
+  std::cout<<"协程开始\n";
+  co_await t;
+  std::cout<<"协程结束\n";
+}
+
 int main() {
-  auto lamda = []()->promise {
-    Input t;
-    std::cout<<"hello\n";
-    co_await t;
-    std::cout<<"end\n";
-  };
-  promise result = lamda();
+  promise result = func();
   std::cout<<"main\n";
   result._h.resume();
 }
