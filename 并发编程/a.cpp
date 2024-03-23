@@ -6,6 +6,7 @@ void func() {
 }
 
 int main() {
+  //调用func
   std:: thread t(func);
   t.join();
 }
