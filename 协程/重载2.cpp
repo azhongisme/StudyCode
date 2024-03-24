@@ -2,6 +2,7 @@
 #include <coroutine>
 #include <thread>
 #include <chrono>
+#include <future>
 
 struct promise;
 struct coroutine : std::coroutine_handle<promise> {
@@ -9,6 +10,7 @@ struct coroutine : std::coroutine_handle<promise> {
 };//coroutine继承std::coroutine_handle<promise>
 
 struct promise {
+  std::future<int>future;
   int n;
   coroutine get_return_object() {
     return { coroutine::from_promise(*this) };
@@ -27,15 +29,14 @@ struct Future {
     return false;
   }
   //协程暂停后调用await_suspend
-  void await_suspend(std::coroutine_handle<>h) {
-    std::thread thread{[this,h] {//异步任务
+  void await_suspend(std::coroutine_handle<promise>h) {
+    h.promise().future = std::async([this, h] {
       int t = this->n;
-      for (int i = 1; i < t; i++) {
-        this-> n *= i;
-      }
+      for (int i = 1; i < t; i++)
+        this->n *= i;
       if (!h.done()) h.resume();
-    }};
-    thread.detach();
+      return n;
+    });
   }
   T await_resume() { return n; }
 };
