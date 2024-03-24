@@ -57,8 +57,7 @@ coroutine f() {
 int main() {
   auto result = f();
   std::cout<<"main\n";
-  using namespace std::literals;
-  std::this_thread::sleep_for(100ms);
+  result.promise().future.wait();
   result.resume();
   std::cout<<std::boolalpha<<result.done()<<'\n';
   std::cout<<"co_yield value: "<<result.promise().n<<'\n';
