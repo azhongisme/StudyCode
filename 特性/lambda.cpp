@@ -20,7 +20,7 @@ int main() {
 
   // };
   int a = 1;
-  auto lam = [a]()mutable {
+  auto lam = [&a]() {
     a = 2;
   };
   lam();
