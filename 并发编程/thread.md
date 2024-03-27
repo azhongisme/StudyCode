@@ -43,3 +43,37 @@ std::vector<std::thread>Threads;
     i.join();
   }
   ```
+  # 常见错误
+``` cpp
+struct X {
+  void operator()() {
+    std::cout<<"this is X's ()\n";
+  }
+};
+//std::thread t3 (X());  不合法
+std::thread t3 ((X())); //合法
+std::thread t3{ X() };  //合法
+t3.join();
+```
+
+```cpp
+class thread_guard {
+  std::thread& t_;
+public:
+  explicit thread_guard(std::thread& t) : t_(t) {}
+  ~thread_guard() {
+    if (t_.joinable()) {
+      t_.join();
+    }
+  }
+  thread_guard(thread_guard const&) = delete;
+  thread_guard& operator = (thread_guard const&) = delete;
+};
+
+int main() {
+  std::thread t([] {
+    std::cout<<"hello world\n";
+  });
+  thread_guard tt(t);
+}
+```

@@ -10,6 +10,12 @@ void f(int& t, size_t n) {
   t = tmp; 
 }
 
+struct X {
+  void operator()() {
+    std::cout<<"this is X's ()\n";
+  }
+};
+
 int main() {
   std::thread t{[](){std::cout<<std::this_thread::get_id()<<'\n';}};
   t.join();
@@ -28,4 +34,12 @@ int main() {
   for (auto& i : Threads) {
     i.join();
   }
+
+  // std::thread t3{ X() };
+  std::thread t3 ((X()));
+  t3.join();
+
+  // using namespace std::literals;
+  // std::cout<<"等待三秒自动结束\n";
+  // std::this_thread::sleep_for(3s);
 }
