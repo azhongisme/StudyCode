@@ -1,48 +1,31 @@
-#include<iostream>
-#include<thread>
+#include <iostream>
+#include <thread>
+#include <vector>
 
-#if 0
-void func() {
-  std::cout<<"hello world\n";
-}
-
-int main() {
-  //调用func
-  std:: thread t(func);
-  t.join();
-}
-#endif
-
-#if 0
-
-int main() {
-  std::thread t ([] {
-    std::cout<<"hello world\n";
-  });
-  t.join();
-}
-#endif
-
-#if 0
-void func(std::string str) {
-  std::cout<<str<<'\n';
-}
-
-int main() {
-  std::thread t (func, "hello world");
-  t.join();
-}
-
-#endif
-
-void func(int n) {
+void f(int& t, size_t n) {
+  size_t tmp{};
   for (int i = 1; i <= n; i++) {
-    std::cout<<i<<"\n";
+    tmp += i;
   }
+  t = tmp; 
 }
 
 int main() {
-  std::thread t (func, 100);
-  t.detach();//主线程不等待子线程
-  std::cout<<"main\n";
+  std::thread t{[](){std::cout<<std::this_thread::get_id()<<'\n';}};
+  t.join();
+
+  int v{};
+  std::thread t2(f, std::ref(v), 100);
+  t2.join();
+  std::cout<<v<<'\n';
+
+  std::vector<std::thread>Threads;
+  for (size_t i = 0; i < 10; i++) {
+    Threads.emplace_back([=]{
+      std::cout<<"this is "<<i<<"th thread\n";
+    });
+  }
+  for (auto& i : Threads) {
+    i.join();
+  }
 }
