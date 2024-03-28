@@ -6,7 +6,6 @@ struct X {
     mutable std::mutex m;
     void f()const {
         std::unique_lock<std::mutex>ul(m);
-        ul.lock();
         std::cout<<"this is X\t"<<std::this_thread::get_id()<<'\n';
         ul.unlock();
     }
