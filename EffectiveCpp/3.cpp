@@ -8,7 +8,7 @@ public:
     { return text[position]; }
     //operator[] for const 对象
     char& operator[] (std::size_t position)
-    { return text[position]; }
+    { return const_cast<char&>(static_cast<const TextBlock&>(*this)[position]); }
     //operator[] for non-const 对象
 
 private:
