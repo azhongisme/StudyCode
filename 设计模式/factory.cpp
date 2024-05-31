@@ -14,7 +14,7 @@ public:
         std::cout<< "transform to sheep\n";
     }
     void ability() override {
-        std::cout<< "the ability of shee\n";
+        std::cout<< "the ability of sheep\n";
     }
 };
 
