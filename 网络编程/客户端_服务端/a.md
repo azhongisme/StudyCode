@@ -76,3 +76,45 @@ if (sockfd == -1) {
     perror("bind"); close(listenfd); return -1; 
   }
 ```
+## 把socket设置为可连接（监听）的状态。
+```cpp
+  if (listen(listenfd,5) != 0 ) { 
+    perror("listen"); close(listenfd);
+    return -1; 
+  }
+```
+## 受理客户端的连接请求，如果没有客户端连上来，accept()函数将阻塞等待。
+```cpp
+  int clientfd=accept(listenfd,0,0);
+  if (clientfd==-1) {
+    perror("accept");
+    close(listenfd);
+    return -1; 
+  }
+```
+## 与客户端通信，接收客户端发过来的报文后，回复ok。
+```cpp
+  char buffer[1024];
+  while (true) {
+    int iret;
+    memset(buffer,0,sizeof(buffer));
+    // 接收客户端的请求报文，如果客户端没有发送请求报文，recv()函数将阻塞等待。
+    // 如果客户端已断开连接，recv()函数将返回0。
+    if ( (iret=recv(clientfd,buffer,sizeof(buffer),0))<=0) {
+       std::cout << "iret=" << iret << std::endl;  break;   
+    }
+    std::cout << "接收：" << buffer << std::endl;
+ 
+    strcpy(buffer,"ok");  // 生成回应报文内容。
+    // 向客户端发送回应报文。
+    if ( (iret=send(clientfd,buffer,strlen(buffer),0))<=0) { 
+      perror("send"); break; 
+    }
+    std::cout << "发送：" << buffer << std::endl;
+  }
+```
+## 关闭socket，释放资源。
+```cpp
+  close(listenfd);   // 关闭服务端用于监听的socket。
+  close(clientfd);   // 关闭客户端连上来的socket。
+```
