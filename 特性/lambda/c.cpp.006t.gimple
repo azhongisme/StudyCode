@@ -1,0 +1,42 @@
+int main ()
+{
+  int D.53848;
+
+  {
+    int x;
+    int y;
+    struct ._anon_88 foo;
+    typedef struct ._anon_88 ._anon_88;
+    int z;
+
+    try
+      {
+        x = 5;
+        y = 8;
+        foo.__x = x;
+        foo.__y = y;
+        z = main()::<lambda()>::operator() (&foo);
+      }
+    finally
+      {
+        foo = {CLOBBER(eol)};
+      }
+  }
+  D.53848 = 0;
+  return D.53848;
+}
+
+
+int main()::<lambda()>::operator() (const struct ._anon_88 * const __closure)
+{
+  int D.53850;
+  const int x [value-expr: __closure->__x];
+  const int y [value-expr: __closure->__y];
+
+  _1 = __closure->__x;
+  _2 = __closure->__y;
+  D.53850 = _1 * _2;
+  return D.53850;
+}
+
+
